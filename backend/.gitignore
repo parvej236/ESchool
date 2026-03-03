@@ -1,0 +1,36 @@
+HELP.md
+
+### Build output
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### Maven / wrapper
+.mvn/wrapper/maven-wrapper.jar
+
+### IDE files
+.idea/
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+*.iws
+*.iml
+*.ipr
+.vscode/
+
+### Local configuration / env
+*.env
+.env
+.env.*.local
+*.local
+
+### Logs
+logs/
+*.log
