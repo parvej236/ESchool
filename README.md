@@ -5,7 +5,8 @@ The project is split into a **Spring Boot** backend and a **Vue 3** frontend, wi
 
 I am following this:
 - for customer view: https://ecommerce-frontend-view.netlify.app/
-- for admin view: https://ecommerce-admin-view.netlify.app/ 
+- for admin view: https://ecommerce-admin-view.netlify.app/
+- this is the youtube video link which I followed: https://youtu.be/KKJeBswz4e8
 
 ### Tech stack
 
