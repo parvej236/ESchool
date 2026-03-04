@@ -3,22 +3,7 @@ INSERT INTO class_info (id,class_name, description, instructor, schedule, capaci
 (2,'Computer Science Fundamentals', 'Learn the basics of programming, data structures, and algorithms. No prior experience required.', 'Prof. Michael Chen', 'Tuesday, Thursday 2:00 PM - 4:00 PM', 25, 20, true, CURRENT_TIMESTAMP),
 (3,'English Literature', 'Explore classic and modern literature from around the world. Develop critical reading and writing skills.', 'Dr. Emily Williams', 'Monday, Wednesday 11:00 AM - 12:30 PM', 35, 30, true, CURRENT_TIMESTAMP),
 (4,'Physics for Engineers', 'Advanced physics concepts including mechanics, thermodynamics, and electromagnetism.', 'Prof. David Martinez', 'Tuesday, Thursday 10:00 AM - 12:00 PM', 20, 18, true, CURRENT_TIMESTAMP),
-(5,'History of Art', 'Journey through art history from ancient civilizations to contemporary art movements.', 'Dr. Lisa Anderson', 'Friday 1:00 PM - 4:00 PM', 40, 35, true, CURRENT_TIMESTAMP),
-(6,'Chemistry Lab', 'Hands-on laboratory experience with chemical reactions, analysis, and safety protocols.', 'Prof. Robert Taylor', 'Monday, Wednesday 2:00 PM - 5:00 PM', 15, 12, true, CURRENT_TIMESTAMP),
-(7,'Business Management', 'Learn essential business skills including leadership, strategy, and organizational behavior.', 'Dr. Jennifer Brown', 'Tuesday, Thursday 9:00 AM - 11:00 AM', 30, 28, true, CURRENT_TIMESTAMP),
-(8,'Spanish Language', 'Beginner to intermediate Spanish language course focusing on conversation and grammar.', 'Prof. Carlos Rodriguez', 'Monday, Wednesday, Friday 3:00 PM - 4:30 PM', 25, 22, true, CURRENT_TIMESTAMP),
-(9,'Web Development', 'Build modern web applications using HTML, CSS, JavaScript, and popular frameworks.', 'Dr. Alex Thompson', 'Tuesday, Thursday 1:00 PM - 3:00 PM', 20, 15, true, CURRENT_TIMESTAMP),
-(10,'Psychology 101', 'Introduction to psychology covering human behavior, cognition, and mental processes.', 'Dr. Maria Garcia', 'Monday, Wednesday 10:00 AM - 11:30 AM', 35, 32, true, CURRENT_TIMESTAMP),
-(11,'Advanced Calculus', 'Deep dive into calculus including limits, derivatives, integrals, and applications.', 'Prof. James Wilson', 'Tuesday, Thursday 2:00 PM - 4:00 PM', 18, 16, true, CURRENT_TIMESTAMP),
-(12,'Digital Marketing', 'Learn modern marketing strategies including SEO, social media, and content marketing.', 'Dr. Amanda Lee', 'Friday 10:00 AM - 1:00 PM', 30, 25, true, CURRENT_TIMESTAMP),
-(13,'Data Science', 'Introduction to data analysis, machine learning, and statistical methods using Python.', 'Prof. Kevin Park', 'Monday, Wednesday 1:00 PM - 3:00 PM', 22, 20, true, CURRENT_TIMESTAMP),
-(14,'Music Theory', 'Learn the fundamentals of music theory, composition, and musical analysis.', 'Dr. Patricia White', 'Tuesday, Thursday 4:00 PM - 6:00 PM', 25, 18, true, CURRENT_TIMESTAMP),
-(15,'Environmental Science', 'Study of environmental issues, sustainability, and conservation practices.', 'Prof. Mark Davis', 'Monday, Wednesday 2:00 PM - 4:00 PM', 30, 24, true, CURRENT_TIMESTAMP),
-(16,'Public Speaking', 'Develop confidence and skills in public speaking and presentation techniques.', 'Dr. Rachel Green', 'Friday 2:00 PM - 5:00 PM', 20, 15, true, CURRENT_TIMESTAMP),
-(17,'Database Design', 'Learn to design and implement efficient database systems using SQL and NoSQL.', 'Prof. Thomas Moore', 'Tuesday, Thursday 11:00 AM - 1:00 PM', 18, 14, true, CURRENT_TIMESTAMP),
-(18,'Creative Writing', 'Explore various forms of creative writing including fiction, poetry, and screenwriting.', 'Dr. Susan Clark', 'Monday, Wednesday 4:00 PM - 6:00 PM', 25, 20, true, CURRENT_TIMESTAMP),
-(19,'Statistics and Probability', 'Comprehensive course on statistical methods, probability theory, and data interpretation.', 'Prof. Daniel Lewis', 'Tuesday, Thursday 9:00 AM - 11:00 AM', 28, 25, true, CURRENT_TIMESTAMP),
-(20,'Mobile App Development', 'Build mobile applications for iOS and Android using modern development frameworks.', 'Dr. Christopher Young', 'Monday, Wednesday 1:00 PM - 3:30 PM', 20, 17, true, CURRENT_TIMESTAMP);
+(5,'History of Art', 'Journey through art history from ancient civilizations to contemporary art movements.', 'Dr. Lisa Anderson', 'Friday 1:00 PM - 4:00 PM', 40, 35, true, CURRENT_TIMESTAMP);
 
 insert into home_slides values
 (1, true, now(), 'Experience structured courses with interactive lessons, quizzes, and hands-on projects designed to make learning practical and engaging.', 35, 'https://plus.unsplash.com/premium_photo-1673292293042-cafd9c8a3ab3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'https://www.quantummethod.org', 'Interactive Learning Experience', now()),
@@ -26,3 +11,7 @@ insert into home_slides values
 (3, true, now(), 'Learn from experienced instructors and industry professionals who guide you through real-world skills and concepts.', 35, 'https://plus.unsplash.com/premium_photo-1673292293042-cafd9c8a3ab3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'https://www.quantummethod.org', 'Learn from Expert Instructors', now()),
 (4, true, now(), 'Build your career with practical courses, certifications, and skill-based learning paths tailored for modern education.', 35, 'https://plus.unsplash.com/premium_photo-1673292293042-cafd9c8a3ab3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'https://www.quantummethod.org', 'Career-Focused Learning', now()),
 (5, true, now(), 'Access your courses anytime from any device and continue learning at your own pace without limitations.', 35, 'https://plus.unsplash.com/premium_photo-1673292293042-cafd9c8a3ab3?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', 'https://www.quantummethod.org', 'Flexible Learning for Everyone', now());
+
+
+INSERT INTO users (id, email, password, reset_token, reset_token_expiry, role, username) VALUES
+(13,'alamparvej2024@gmail.com','$2a$12$oPE5DRJeQ72/tBNlHp/uRusuoSVOj.m05HnvaofqohyDJDtxoNeEO',NULL,NULL,'SYSTEM','system');

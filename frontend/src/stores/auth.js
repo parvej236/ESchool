@@ -1,40 +1,15 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
-// Helper function to decode JWT
-function decodeJWT(token) {
-  try {
-    const base64Url = token.split('.')[1]
-    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
-    const jsonPayload = decodeURIComponent(
-      atob(base64)
-        .split('')
-        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-        .join('')
-    )
-    return JSON.parse(jsonPayload)
-  } catch (e) {
-    return null
-  }
-}
-
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('jwt_token') || null)
   const user = ref(null)
+  /** Becomes true after first validateAuth(); prevents showing Dashboard from stale token before validation */
+  const authReady = ref(false)
 
   const isAuthenticated = computed(() => !!token.value)
-  
-  const userRole = computed(() => {
-    if (!token.value) return null
-    const decoded = decodeJWT(token.value)
-    // The role might be in the token or we need to fetch it
-    // For now, we'll fetch it from the dashboard endpoint
-    return user.value?.role || null
-  })
-
-  const isAdmin = computed(() => {
-    return userRole.value === 'ADMIN'
-  })
+  /** Only true when we have a token AND we've validated it (so no "logged in" from stale token on load) */
+  const isAuthenticatedAfterCheck = computed(() => authReady.value && !!token.value)
 
   function setToken(newToken) {
     token.value = newToken
@@ -61,17 +36,29 @@ export const useAuthStore = defineStore('auth', () => {
       
       if (response.ok) {
         const profile = await response.json()
-        // Try to get role from authorities or user data
-        if (profile.authorities && profile.authorities.length > 0) {
-          const role = profile.authorities[0].authority.replace('ROLE_', '')
-          setUser({ ...profile, role })
-        } else {
-          setUser(profile)
-        }
+        setUser(profile)
+      } else if (response.status === 401 || response.status === 403) {
+        // Token invalid or user not in DB – clear so user must log in again
+        logout()
+      } else {
+        // Other error (e.g. 500) – don't treat as logged in
+        logout()
       }
     } catch (err) {
+      // Network error or other – can't verify token, so clear it
       console.error('Failed to fetch user info:', err)
+      logout()
     }
+  }
+
+  /** Call on app load to validate token; clears it if backend rejects (e.g. no user in DB) */
+  async function validateAuth() {
+    if (!token.value) {
+      authReady.value = true
+      return
+    }
+    await fetchUserInfo()
+    authReady.value = true
   }
 
   function logout() {
@@ -87,14 +74,15 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     token,
     user,
+    authReady,
     isAuthenticated,
-    userRole,
-    isAdmin,
+    isAuthenticatedAfterCheck,
     setToken,
     setUser,
     logout,
     getAuthHeader,
-    fetchUserInfo
+    fetchUserInfo,
+    validateAuth
   }
 })
 

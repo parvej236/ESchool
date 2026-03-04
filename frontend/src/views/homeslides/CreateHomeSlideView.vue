@@ -29,10 +29,6 @@ onMounted(async () => {
   if (!authStore.user) {
     await authStore.fetchUserInfo()
   }
-  
-  if (!authStore.isAdmin) {
-    router.push('/dashboard')
-  }
 })
 
 const handleCreateSlide = async () => {

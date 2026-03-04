@@ -1,6 +1,8 @@
-package com.parvej.backend.user;
+package com.parvej.backend.config;
 
 import com.parvej.backend.config.EmailService;
+import com.parvej.backend.user.UserService;
+import com.parvej.backend.user.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -13,7 +15,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "*")
-public class UserController {
+public class LoginController {
 
     @Autowired
     private UserService service;

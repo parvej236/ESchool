@@ -1,4 +1,5 @@
 <script setup>
+import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import { ref, onMounted } from 'vue'
 
 const classes = ref([])
@@ -63,7 +64,7 @@ onMounted(() => {
 <template>
   <div class="min-h-screen">
     <!-- Home Slides Carousel -->
-    <section v-if="homeSlides.length > 0" class="relative w-full h-[500px] overflow-hidden bg-gray-900">
+    <section v-if="homeSlides.length > 0" class="relative w-full h-125 overflow-hidden bg-gray-900">
       <div class="relative h-full">
         <div v-for="(slide, index) in homeSlides" :key="slide.id"
           :class="{ 'opacity-100 z-10': index === currentSlideIndex, 'opacity-0 z-0': index !== currentSlideIndex }"
@@ -110,7 +111,7 @@ onMounted(() => {
     </section>
 
     <!-- Hero Section (fallback if no slides) -->
-    <section v-else class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+    <section v-else class="bg-linear-to-r from-blue-600 to-purple-600 text-white py-20">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 class="text-5xl font-bold mb-4">Welcome to Our School</h1>
         <p class="text-xl mb-8">Excellence in Education, Innovation in Learning</p>
@@ -118,7 +119,7 @@ onMounted(() => {
     </section>
 
     <!-- Active Classes Section -->
-    <section class="py-16 bg-gradient-to-b from-gray-50 to-white">
+    <section class="py-16 bg-linear-to-b from-gray-50 to-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
           <h2 class="text-4xl font-bold text-gray-900 mb-4">Active Classes</h2>
@@ -201,12 +202,12 @@ onMounted(() => {
 .line-clamp-3 {
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .image-bg {
-  /* background-image: url('https://images.unsplash.com/photo-1501854140582-z6590c5c8f78?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80'); */
   background-color: aqua;
 }
 </style>

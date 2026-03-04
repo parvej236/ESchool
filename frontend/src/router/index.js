@@ -64,13 +64,13 @@ const routes = [
     path: "/admin/create-home-slide",
     name: "create-home-slide",
     component: CreateHomeSlideView,
-    meta: { requiresAuth: true, requiresAdmin: true },
+    meta: { requiresAuth: true },
   },
   {
     path: "/admin/edit-home-slide/:id",
     name: "edit-home-slide",
     component: EditHomeSlideView,
-    meta: { requiresAuth: true, requiresAdmin: true },
+    meta: { requiresAuth: true },
   },
 ];
 
@@ -92,32 +92,20 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
 
-  // Check if route requires authentication
-  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
-    // Redirect to login if not authenticated
+  // Wait for initial auth check so we don't allow dashboard access with stale token
+  if (!authStore.authReady) {
+    await authStore.validateAuth();
+  }
+
+  // Check if route requires authentication (use validated state so stale token can't access)
+  if (to.meta.requiresAuth && !authStore.isAuthenticatedAfterCheck) {
     next({ name: "login", query: { redirect: to.fullPath } });
     return;
   }
 
-  // Check if route requires admin role
-  if (to.meta.requiresAdmin) {
-    // Fetch user info to get role if not already loaded
-    if (!authStore.user) {
-      await authStore.fetchUserInfo();
-    }
-
-    if (!authStore.isAdmin) {
-      // Redirect to dashboard if not admin
-      next({ name: "dashboard" });
-      return;
-    }
-  }
-
-  if (to.meta.redirectIfAuthenticated && authStore.isAuthenticated) {
-    // Redirect to dashboard if already authenticated and trying to access login/register
+  if (to.meta.redirectIfAuthenticated && authStore.isAuthenticatedAfterCheck) {
     next({ name: "dashboard" });
   } else {
-    // Allow navigation
     next();
   }
 });

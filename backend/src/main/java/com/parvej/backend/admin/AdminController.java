@@ -5,7 +5,6 @@ import com.parvej.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
@@ -18,7 +17,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -54,10 +52,6 @@ public class AdminController {
                 error.put("error", "Password must be at least 6 characters");
                 return ResponseEntity.badRequest().body(error);
             }
-            if (user.getRole() == null || user.getRole().trim().isEmpty()) {
-                user.setRole("USER");
-            }
-            
             user.setPassword(encoder.encode(user.getPassword()));
             Users savedUser = userService.register(user);
             
@@ -106,10 +100,6 @@ public class AdminController {
                     return ResponseEntity.badRequest().body(error);
                 }
                 user.setPassword(encoder.encode(userDetails.getPassword()));
-            }
-
-            if (userDetails.getRole() != null && !userDetails.getRole().trim().isEmpty()) {
-                user.setRole(userDetails.getRole());
             }
 
             Users updatedUser = userService.updateUser(user);

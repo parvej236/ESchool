@@ -2,7 +2,6 @@ package com.parvej.backend.classInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,9 +32,8 @@ public class ClassInfoController {
         }
     }
 
-    // Admin only - get all classes (active and inactive)
+    // Get all classes (active and inactive)
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllClassesAdmin() {
         try {
             List<ClassInfo> classes = classInfoRepo.findAll();
@@ -50,9 +48,8 @@ public class ClassInfoController {
         }
     }
 
-    // Admin only - create class
+    // Create class
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createClass(@RequestBody ClassInfo classInfo) {
         try {
             // Validate required fields
@@ -111,9 +108,8 @@ public class ClassInfoController {
         }
     }
 
-    // Admin only - update class
+    // Update class
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateClass(@PathVariable Integer id, @RequestBody ClassInfo classDetails) {
         try {
             ClassInfo classInfo = classInfoRepo.findById(id).orElse(null);
@@ -179,9 +175,8 @@ public class ClassInfoController {
         }
     }
 
-    // Admin only - delete class
+    // Delete class
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteClass(@PathVariable Integer id) {
         try {
             if (!classInfoRepo.existsById(id)) {
@@ -202,9 +197,8 @@ public class ClassInfoController {
         }
     }
 
-    // Admin only - get class by ID (must be after /active and /all to avoid path conflicts)
+    // Get class by ID (must be after /active and /all to avoid path conflicts)
     @GetMapping("/details/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getClassById(@PathVariable Integer id) {
         try {
             ClassInfo classInfo = classInfoRepo.findById(id).orElse(null);

@@ -18,7 +18,6 @@
       <div class="bg-white shadow rounded p-4">
         <p><strong>Email:</strong> {{ user.email }}</p>
         <p><strong>Username:</strong> {{ user.username }}</p>
-        <p v-if="user.role"><strong>Role:</strong> {{ user.role }}</p>
       </div>
 
       <div class="flex gap-4 mt-4">

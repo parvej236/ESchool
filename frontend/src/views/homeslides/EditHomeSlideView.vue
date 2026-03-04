@@ -24,7 +24,7 @@ const API_BASE_URL = 'http://localhost:8080'
 const slideId = route.params.id
 
 onMounted(async () => {
-  if (!authStore.isAuthenticated || !authStore.isAdmin) {
+  if (!authStore.isAuthenticated) {
     router.push('/dashboard')
     return
   }

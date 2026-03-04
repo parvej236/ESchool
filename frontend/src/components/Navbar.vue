@@ -16,7 +16,7 @@ const handleLogout = () => {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex">
-          <div class="flex-shrink-0 flex items-center">
+          <div class="shrink-0 flex items-center">
             <router-link to="/"><img src="/src/assets/logo.jpg" alt="ESchool Logo" class="h-10 w-auto"></router-link>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
@@ -33,8 +33,8 @@ const handleLogout = () => {
           </div>
         </div>
         <div class="flex items-center space-x-4">
-          <!-- Authenticated User Menu -->
-          <template v-if="authStore.isAuthenticated">
+          <!-- Authenticated User Menu (only after we've validated token on load) -->
+          <template v-if="authStore.isAuthenticatedAfterCheck">
             <router-link to="/dashboard"
               class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
               <iconify-icon icon="fa-solid:bars" style="font-size: 20px;"></iconify-icon>

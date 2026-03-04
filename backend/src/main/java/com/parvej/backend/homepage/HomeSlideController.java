@@ -2,7 +2,6 @@ package com.parvej.backend.homepage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -33,9 +32,8 @@ public class HomeSlideController {
         }
     }
 
-    // Admin only - get all slides
+    // Get all slides
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getAllSlides() {
         try {
             List<HomeSlide> slides = homeSlideRepo.findAllByOrderByDisplayOrderAsc();
@@ -50,9 +48,8 @@ public class HomeSlideController {
         }
     }
 
-    // Admin only - create slide
+    // Create slide
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createSlide(@RequestBody HomeSlide slide) {
         try {
             // Validate required fields
@@ -89,9 +86,8 @@ public class HomeSlideController {
         }
     }
 
-    // Admin only - update slide
+    // Update slide
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateSlide(@PathVariable Integer id, @RequestBody HomeSlide slideDetails) {
         try {
             HomeSlide slide = homeSlideRepo.findById(id).orElse(null);
@@ -144,9 +140,8 @@ public class HomeSlideController {
         }
     }
 
-    // Admin only - delete slide
+    // Delete slide
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteSlide(@PathVariable Integer id) {
         try {
             if (!homeSlideRepo.existsById(id)) {
@@ -168,9 +163,8 @@ public class HomeSlideController {
         }
     }
 
-    // Admin only - get slide by ID
+    // Get slide by ID
     @GetMapping("/details/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getSlideById(@PathVariable Integer id) {
         try {
             HomeSlide slide = homeSlideRepo.findById(id).orElse(null);

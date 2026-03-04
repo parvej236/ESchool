@@ -1,7 +1,6 @@
 package com.parvej.backend.admin;
 
 import com.parvej.backend.classInfo.ClassInfoRepo;
-import com.parvej.backend.role.RoleRepo;
 import com.parvej.backend.user.UserRepo;
 import com.parvej.backend.user.UserService;
 import com.parvej.backend.user.Users;
@@ -27,20 +26,18 @@ public class DashboardController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RoleRepo roleRepo;
-
     @GetMapping("/data")
     public ResponseEntity<?> getDashboardData(Authentication authentication) {
         try {
-            String username = authentication != null ? authentication.getName() : "User";
-            
+            if (authentication == null) {
+                return ResponseEntity.status(401).body(Map.of("error", "Unauthorized"));
+            }
+            String username = authentication.getName();
             Map<String, Object> data = new HashMap<>();
             data.put("message", "Welcome to the Dashboard, " + username + "!");
             data.put("username", username);
             data.put("status", "authenticated");
             data.put("timestamp", System.currentTimeMillis());
-            
             return ResponseEntity.ok(data);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
@@ -54,13 +51,11 @@ public class DashboardController {
         try {
             long totalUsers = userRepo.count();
             long totalClasses = classInfoRepo.count();
-            long totalRoles = roleRepo.count();
             
             Map<String, Object> stats = new HashMap<>();
             stats.put("totalUsers", totalUsers);
             stats.put("totalOrders", 0); // Placeholder for future orders feature
             stats.put("totalClasses", totalClasses);
-            stats.put("totalRoles", totalRoles);
             
             return ResponseEntity.ok(stats);
         } catch (Exception e) {
@@ -90,7 +85,6 @@ public class DashboardController {
             Map<String, Object> profile = new HashMap<>();
             profile.put("username", user.getUsername());
             profile.put("email", user.getEmail());
-            profile.put("role", user.getRole());
 
 
 //            UserDetails userDetails = (UserDetails) authentication.getPrincipal();

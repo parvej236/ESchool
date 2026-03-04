@@ -28,10 +28,6 @@ public class UserService {
         if (existingUser.isPresent()) {
             throw new RuntimeException("Username already exists");
         }
-        // Set default role if not provided
-        if (user.getRole() == null || user.getRole().trim().isEmpty()) {
-            user.setRole("USER");
-        }
         return repo.save(user);
     }
 

@@ -41,15 +41,15 @@ public class SecurityConfig {
                         // Static resources
                         .requestMatchers("/static/**", "/favicon.ico", "/error")
                         .permitAll()
-                        // Admin endpoints
+                        // Admin endpoints (any authenticated user)
                         .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
-                        // Class management endpoints (admin only)
+                        .authenticated()
+                        // Class management endpoints
                         .requestMatchers("/api/classes/**")
-                        .hasRole("ADMIN")
-                        // Home slide management endpoints (admin only, except /active)
+                        .authenticated()
+                        // Home slide management endpoints (except /active is public)
                         .requestMatchers("/api/home-slides/**")
-                        .hasRole("ADMIN")
+                        .authenticated()
                         // Protected endpoints
                         .requestMatchers("/api/dashboard/**")
                         .authenticated()

@@ -24,9 +24,10 @@ public class Users {
     
     @Column(nullable = false)
     private String password;
-    
-    @Column(nullable = false)
-    private String role = "USER";
+
+    /** Optional; not used for access control */
+    @Column(name = "role")
+    private String role;
 
     @Column(name = "reset_token")
     private String resetToken;
