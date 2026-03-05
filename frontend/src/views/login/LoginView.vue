@@ -125,7 +125,7 @@ const handleLogin = async () => {
       <!-- RIGHT: Illustration -->
       <div class="hidden lg:flex items-center justify-center bg-green-50">
         <div class="text-center p-10">
-          <img src="/src/assets/logo.jpg" class="h-24 mx-auto mb-6" alt="Logo" />
+          <img src="/src/assets/images/quantum-logo-9d5Rton5.png" class="h-24 mx-auto mb-6" alt="Logo" />
           <img src="/src/assets/images/vec_art_stu_1.png" class="w-105 mx-auto" alt="Illustration" />
           <h3 class="text-xl font-semibold text-gray-800 mt-6">Build your workspace</h3>
           <p class="text-gray-500 mt-2">Organize everything in one place</p>

@@ -12,7 +12,7 @@ const authStore = useAuthStore()
       <div class="flex justify-between h-16">
         <div class="flex">
           <div class="shrink-0 flex items-center">
-            <router-link to="/"><img src="/src/assets/logo.jpg" alt="ESchool Logo" class="h-10 w-auto"></router-link>
+            <router-link to="/"><img src="/src/assets/images/quantum-logo-9d5Rton5.png" alt="ESchool Logo" class="h-10 w-auto"></router-link>
           </div>
           <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
             <router-link to="/"
