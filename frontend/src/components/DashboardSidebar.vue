@@ -40,7 +40,7 @@ const handleLogout = () => {
         Users
       </router-link>
 
-      <router-link to="/admin/create-home-slide" class="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+      <router-link to="/dashboard/home-slides" class="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
         active-class="bg-blue-100/70 text-blue-600 font-medium border-l-4 border-blue-600 rounded-l">
         <Images class="w-4 h-6 me-2" />
         Home Slides

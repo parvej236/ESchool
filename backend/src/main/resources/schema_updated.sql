@@ -33,3 +33,47 @@ insert into amrapari."user" values
                                 (26,null,null,null,null,'test18@gmail.com', '$2a$12$ypz8FTxASP37dCmE5K2Yn..KOlJJx5KxW87NEGcPFR1HY6Psm/Ub2', null,null,'test18'),
                                 (27,null,null,null,null,'test19@gmail.com', '$2a$12$ypz8FTxASP37dCmE5K2Yn..KOlJJx5KxW87NEGcPFR1HY6Psm/Ub2', null,null,'test19'),
                                 (28,null,null,null,null,'test20@gmail.com', '$2a$12$ypz8FTxASP37dCmE5K2Yn..KOlJJx5KxW87NEGcPFR1HY6Psm/Ub2', null,null,'test20');
+
+
+-- ============================================================
+-- Dummy Users Data — 30 records for PostgreSQL
+-- Table: user (matches your User.java entity)
+-- ============================================================
+
+INSERT INTO amrapari."user" (email, username, password, reset_token, reset_token_expiry, created_at, updated_at, created_by, updated_by)
+VALUES
+    -- password for all users is: Password@123
+    -- BCrypt hash of "Password@123" with strength 12
+    ('alice.johnson@mail.com',   'alice_johnson',   '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW(), NOW(), 0, 0),
+    ('bob.smith@mail.com',       'bob_smith',       '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '1 day',  NOW() - INTERVAL '1 day',  0, 0),
+    ('carol.white@mail.com',     'carol_white',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '2 days', NOW() - INTERVAL '2 days', 0, 0),
+    ('david.brown@mail.com',     'david_brown',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '3 days', NOW() - INTERVAL '3 days', 0, 0),
+    ('eva.martinez@mail.com',    'eva_martinez',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '4 days', NOW() - INTERVAL '4 days', 0, 0),
+    ('frank.wilson@mail.com',    'frank_wilson',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '5 days', NOW() - INTERVAL '5 days', 0, 0),
+    ('grace.taylor@mail.com',    'grace_taylor',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '6 days', NOW() - INTERVAL '6 days', 0, 0),
+    ('henry.anderson@mail.com',  'henry_anderson',  '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '7 days', NOW() - INTERVAL '7 days', 0, 0),
+    ('iris.thomas@mail.com',     'iris_thomas',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '8 days', NOW() - INTERVAL '8 days', 0, 0),
+    ('jack.jackson@mail.com',    'jack_jackson',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '9 days', NOW() - INTERVAL '9 days', 0, 0),
+
+    ('karen.harris@mail.com',    'karen_harris',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '10 days', NOW() - INTERVAL '10 days', 0, 0),
+    ('liam.martin@mail.com',     'liam_martin',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '11 days', NOW() - INTERVAL '11 days', 0, 0),
+    ('mia.garcia@mail.com',      'mia_garcia',      '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '12 days', NOW() - INTERVAL '12 days', 0, 0),
+    ('noah.davis@mail.com',      'noah_davis',      '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '13 days', NOW() - INTERVAL '13 days', 0, 0),
+    ('olivia.rodriguez@mail.com','olivia_rodriguez', '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '14 days', NOW() - INTERVAL '14 days', 0, 0),
+    ('peter.lewis@mail.com',     'peter_lewis',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '15 days', NOW() - INTERVAL '15 days', 0, 0),
+    ('quinn.lee@mail.com',       'quinn_lee',       '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '16 days', NOW() - INTERVAL '16 days', 0, 0),
+    ('rachel.walker@mail.com',   'rachel_walker',   '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '17 days', NOW() - INTERVAL '17 days', 0, 0),
+    ('sam.hall@mail.com',        'sam_hall',        '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '18 days', NOW() - INTERVAL '18 days', 0, 0),
+    ('tina.allen@mail.com',      'tina_allen',      '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '19 days', NOW() - INTERVAL '19 days', 0, 0),
+
+    ('uma.young@mail.com',       'uma_young',       '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '20 days', NOW() - INTERVAL '20 days', 0, 0),
+    ('victor.king@mail.com',     'victor_king',     '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '21 days', NOW() - INTERVAL '21 days', 0, 0),
+    ('wendy.wright@mail.com',    'wendy_wright',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '22 days', NOW() - INTERVAL '22 days', 0, 0),
+    ('xander.scott@mail.com',    'xander_scott',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '23 days', NOW() - INTERVAL '23 days', 0, 0),
+    ('yara.green@mail.com',      'yara_green',      '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '24 days', NOW() - INTERVAL '24 days', 0, 0),
+    ('zack.baker@mail.com',      'zack_baker',      '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '25 days', NOW() - INTERVAL '25 days', 0, 0),
+    ('amy.adams@mail.com',       'amy_adams',       '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '26 days', NOW() - INTERVAL '26 days', 0, 0),
+    ('brian.nelson@mail.com',    'brian_nelson',    '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '27 days', NOW() - INTERVAL '27 days', 0, 0),
+    ('claire.carter@mail.com',   'claire_carter',   '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '28 days', NOW() - INTERVAL '28 days', 0, 0),
+    ('daniel.mitchell@mail.com', 'daniel_mitchell', '$2a$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', NULL, NULL, NOW() - INTERVAL '29 days', NOW() - INTERVAL '29 days', 0, 0);
+

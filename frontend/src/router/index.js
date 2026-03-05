@@ -8,8 +8,6 @@ import ForgotPasswordView from "@/views/login/ForgotPasswordView.vue";
 import ResetPasswordView from "@/views/login/ResetPasswordView.vue";
 import ChangePasswordView from "@/views/login/ChangePasswordView.vue";
 import ProfileView from "@/views/login/ProfileView.vue";
-import CreateHomeSlideView from "@/views/homeslides/CreateHomeSlideView.vue";
-import EditHomeSlideView from "@/views/homeslides/EditHomeSlideView.vue";
 import UsersView from "@/views/UsersView.vue";
 
 const routes = [
@@ -67,18 +65,24 @@ const routes = [
     component: UsersView,
     meta: { requiresAuth: true },
   },
-  {
-    path: "/admin/create-home-slide",
-    name: "create-home-slide",
-    component: CreateHomeSlideView,
-    meta: { requiresAuth: true },
-  },
-  {
-    path: "/admin/edit-home-slide/:id",
-    name: "edit-home-slide",
-    component: EditHomeSlideView,
-    meta: { requiresAuth: true },
-  },
+{
+  path: '/dashboard/home-slides',
+  name: 'home-slides',
+  component: () => import('@/views/HomeSlidesView.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/home-slides/create',
+  name: 'home-slides-create',
+  component: () => import('@/views/HomeSlideFormView.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/home-slides/edit/:id',
+  name: 'home-slides-edit',
+  component: () => import('@/views/HomeSlideFormView.vue'),
+  meta: { requiresAuth: true }
+}
 ];
 
 const router = createRouter({

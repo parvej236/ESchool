@@ -86,18 +86,6 @@ defineProps({
               <span>View Profile</span>
             </button>
 
-            <button @click="handleNavigation('/change-password')"
-              class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center space-x-3 transition">
-              <Lock class="w-4 h-4" />
-              <span>Change Password</span>
-            </button>
-
-            <button @click="handleThemeToggle"
-              class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100 flex items-center space-x-3 transition">
-              <Settings class="w-4 h-4" />
-              <span>{{ isDarkMode ? 'Light Mode' : 'Dark Mode' }}</span>
-            </button>
-
             <div class="border-t border-gray-200 my-2"></div>
             <button @click="handleLogout"
               class="w-full px-4 py-2 text-left text-red-600 hover:bg-red-50 flex items-center space-x-3 transition">
