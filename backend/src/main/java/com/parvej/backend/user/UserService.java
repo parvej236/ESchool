@@ -22,16 +22,16 @@ public class UserService {
     @Autowired
     private JWTService jwtService;
 
-    public Users register(Users user) {
+    public User register(User user) {
         // Check if username already exists
-        Optional<Users> existingUser = repo.findByUsername(user.getUsername());
+        Optional<User> existingUser = repo.findByUsername(user.getUsername());
         if (existingUser.isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         return repo.save(user);
     }
 
-    public String verify(Users user) {
+    public String verify(User user) {
         Authentication authentication =
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
@@ -41,20 +41,19 @@ public class UserService {
         return "fail";
     }
 
-    // Admin methods
-    public List<Users> getAllUsers() {
+    public List<User> getAllUsers() {
         return repo.findAll();
     }
 
-    public Users getUserById(Integer id) {
+    public User getUserById(Integer id) {
         return repo.findById(id).orElse(null);
     }
 
-    public Users getUserByUsername(String username) {
+    public User getUserByUsername(String username) {
         return repo.findByUsername(username).orElse(null);
     }
 
-    public Users updateUser(Users user) {
+    public User updateUser(User user) {
         return repo.save(user);
     }
 
@@ -62,15 +61,15 @@ public class UserService {
         repo.deleteById(id);
     }
 
-    public Users findByEmail(String email) {
+    public User findByEmail(String email) {
         return repo.findByEmail(email).orElse(null);
     }
 
-    public Users findByResetToken(String token) {
+    public User findByResetToken(String token) {
         return repo.findByResetToken(token).orElse(null);
     }
 
-    public Users save(Users user) {
+    public User save(User user) {
         return repo.save(user);
     }
 }

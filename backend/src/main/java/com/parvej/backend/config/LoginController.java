@@ -1,8 +1,7 @@
 package com.parvej.backend.config;
 
-import com.parvej.backend.config.EmailService;
 import com.parvej.backend.user.UserService;
-import com.parvej.backend.user.Users;
+import com.parvej.backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -26,7 +25,7 @@ public class LoginController {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody Users user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
         try {
             if(user.getEmail() == null || user.getEmail().isEmpty()) {
                 Map<String, String> error = new HashMap<>();
@@ -44,7 +43,7 @@ public class LoginController {
                 return ResponseEntity.badRequest().body(error);
             }
             user.setPassword(encoder.encode(user.getPassword()));
-            Users savedUser = service.register(user);
+            User savedUser = service.register(user);
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User registered successfully");
             response.put("user", savedUser);
@@ -61,7 +60,7 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Users user) {
+    public ResponseEntity<?> login(@RequestBody User user) {
         try {
             String token = service.verify(user);
             if (token != null && !token.equals("fail")) {
@@ -85,7 +84,7 @@ public class LoginController {
     public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
         try {
             String email = request.get("email");
-            Users user = service.findByEmail(email);
+            User user = service.findByEmail(email);
             if (user == null) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "User with this email does not exist"));
@@ -121,7 +120,7 @@ public class LoginController {
                         .body(Map.of("error", "Invalid request"));
             }
 
-            Users user = service.findByResetToken(token);
+            User user = service.findByResetToken(token);
             if (user == null) {
                 return ResponseEntity.badRequest()
                         .body(Map.of("error", "Invalid or expired token"));
@@ -160,7 +159,7 @@ public class LoginController {
 
             // Get currently authenticated user
             String username = authentication.getName();
-            Users user = service.getUserByUsername(username);
+            User user = service.getUserByUsername(username);
             if (user == null) {
                 return ResponseEntity.status(404)
                         .body(Map.of("error", "User not found"));

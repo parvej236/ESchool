@@ -34,7 +34,7 @@ const handleLogout = () => {
         Dashboard
       </router-link>
 
-      <router-link to="/admin/create-home-slide" class="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
+      <router-link to="/users" class="flex items-center px-4 py-3 hover:bg-gray-100 transition-colors"
         active-class="bg-blue-100/70 text-blue-600 font-medium border-l-4 border-blue-600 rounded-l">
         <Users class="w-4 h-6 me-2" />
         Users
@@ -45,12 +45,6 @@ const handleLogout = () => {
         <Images class="w-4 h-6 me-2" />
         Home Slides
       </router-link>
-
-      <button @click="handleLogout"
-        class="w-full flex items-center px-4 py-3 hover:bg-red-50 text-red-600 transition-colors text-left">
-        <LogOut class="w-4 h-6 me-2" />
-        Logout
-      </button>
     </nav>
   </aside>
 </template>

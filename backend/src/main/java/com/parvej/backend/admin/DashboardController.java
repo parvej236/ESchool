@@ -3,7 +3,7 @@ package com.parvej.backend.admin;
 import com.parvej.backend.classInfo.ClassInfoRepo;
 import com.parvej.backend.user.UserRepo;
 import com.parvej.backend.user.UserService;
-import com.parvej.backend.user.Users;
+import com.parvej.backend.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -75,7 +75,7 @@ public class DashboardController {
             }
 
             String username = authentication.getName();
-            Users user = userService.getUserByUsername(username);
+            User user = userService.getUserByUsername(username);
 
             if (user == null) {
                 return ResponseEntity.status(404)

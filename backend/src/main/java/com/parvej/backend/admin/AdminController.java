@@ -1,6 +1,6 @@
 package com.parvej.backend.admin;
 
-import com.parvej.backend.user.Users;
+import com.parvej.backend.user.User;
 import com.parvej.backend.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class AdminController {
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers() {
         try {
-            List<Users> users = userService.getAllUsers();
+            List<User> users = userService.getAllUsers();
             Map<String, Object> response = new HashMap<>();
             response.put("users", users);
             response.put("count", users.size());
@@ -40,7 +40,7 @@ public class AdminController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity<?> createUser(@RequestBody Users user, Authentication authentication) {
+    public ResponseEntity<?> createUser(@RequestBody User user, Authentication authentication) {
         try {
             if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
                 Map<String, String> error = new HashMap<>();
@@ -53,7 +53,7 @@ public class AdminController {
                 return ResponseEntity.badRequest().body(error);
             }
             user.setPassword(encoder.encode(user.getPassword()));
-            Users savedUser = userService.register(user);
+            User savedUser = userService.register(user);
             
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User created successfully");
@@ -71,9 +71,9 @@ public class AdminController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody Users userDetails) {
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User userDetails) {
         try {
-            Users user = userService.getUserById(id);
+            User user = userService.getUserById(id);
             if (user == null) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "User not found");
@@ -83,7 +83,7 @@ public class AdminController {
             if (userDetails.getUsername() != null && !userDetails.getUsername().trim().isEmpty()) {
                 // Check if username is being changed and if new username already exists
                 if (!user.getUsername().equals(userDetails.getUsername())) {
-                    Users existingUser = userService.getUserByUsername(userDetails.getUsername());
+                    User existingUser = userService.getUserByUsername(userDetails.getUsername());
                     if (existingUser != null) {
                         Map<String, String> error = new HashMap<>();
                         error.put("error", "Username already exists");
@@ -102,7 +102,7 @@ public class AdminController {
                 user.setPassword(encoder.encode(userDetails.getPassword()));
             }
 
-            Users updatedUser = userService.updateUser(user);
+            User updatedUser = userService.updateUser(user);
             
             Map<String, Object> response = new HashMap<>();
             response.put("message", "User updated successfully");
@@ -118,7 +118,7 @@ public class AdminController {
     @DeleteMapping("/users/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id, Authentication authentication) {
         try {
-            Users user = userService.getUserById(id);
+            User user = userService.getUserById(id);
             if (user == null) {
                 Map<String, String> error = new HashMap<>();
                 error.put("error", "User not found");
@@ -148,7 +148,7 @@ public class AdminController {
     @GetMapping("/users/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Integer id) {
         try {
-            Users user = userService.getUserById(id);
+            User user = userService.getUserById(id);
             if (user == null) {
                 return ResponseEntity.notFound().build();
             }

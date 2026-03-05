@@ -11,33 +11,34 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public class AuditData implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(insertable = false, updatable = false)
     private Long id;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private Date updatedAt;
 
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(name = "created_by")
     @CreatedBy
     private Long createdBy;
 
-    @Column(name = "updated_by", nullable = false)
+    @Column(name = "updated_by")
     @LastModifiedBy
     private Long modifiedBy;
 }

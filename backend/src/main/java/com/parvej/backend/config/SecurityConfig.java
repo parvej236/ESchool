@@ -36,7 +36,7 @@ public class SecurityConfig {
                 .cors(customizer -> customizer.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request -> request
                         // Public endpoints - must be first
-                        .requestMatchers("/", "/api/auth/**", "/api/classes/active", "/api/home-slides/active")
+                        .requestMatchers("/", "/api/auth/**", "/api/classes/active", "/api/home-slides/active", "/api/users", "/api/users/**")
                         .permitAll()
                         // Static resources
                         .requestMatchers("/static/**", "/favicon.ico", "/error")

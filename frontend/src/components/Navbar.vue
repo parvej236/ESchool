@@ -1,14 +1,9 @@
 <script setup>
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
+import { LayoutGrid } from 'lucide-vue-next'
 
 const authStore = useAuthStore()
-const router = useRouter()
-
-const handleLogout = () => {
-  authStore.logout()
-  router.push('/')
-}
 </script>
 
 <template>
@@ -35,9 +30,9 @@ const handleLogout = () => {
         <div class="flex items-center space-x-4">
           <!-- Authenticated User Menu (only after we've validated token on load) -->
           <template v-if="authStore.isAuthenticatedAfterCheck">
-            <router-link to="/dashboard"
-              class="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-md hover:shadow-lg flex items-center gap-2">
-              <iconify-icon icon="fa-solid:bars" style="font-size: 20px;"></iconify-icon>
+            <router-link to="/dashboard" class="flex items-center px-4 py-2 hover:bg-gray-100 transition-colors border border-gray-700 text-gray-800 font-medium"
+              active-class="bg-blue-100/70 text-blue-600 font-medium border-l-4 border-blue-600 rounded-l">
+              <LayoutGrid class="w-4 h-6 me-2" />
               Dashboard
             </router-link>
           </template>

@@ -10,6 +10,7 @@ import ChangePasswordView from "@/views/login/ChangePasswordView.vue";
 import ProfileView from "@/views/login/ProfileView.vue";
 import CreateHomeSlideView from "@/views/homeslides/CreateHomeSlideView.vue";
 import EditHomeSlideView from "@/views/homeslides/EditHomeSlideView.vue";
+import UsersView from "@/views/UsersView.vue";
 
 const routes = [
   {
@@ -58,6 +59,12 @@ const routes = [
     path: "/dashboard",
     name: "dashboard",
     component: DashboardView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/users",
+    name: "users",
+    component: UsersView,
     meta: { requiresAuth: true },
   },
   {

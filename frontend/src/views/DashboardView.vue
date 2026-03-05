@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import DashboardSidebar from '@/components/DashboardSidebar.vue'
 import DashboardHeader from '@/components/DashboardHeader.vue'
-import { Plus, Users, Handbag, BookOpen, Book } from 'lucide-vue-next'
+import { Plus, Users, Handbag, BookOpen, Eye } from 'lucide-vue-next'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -29,9 +29,8 @@ onMounted(async () => {
     <DashboardSidebar />
 
     <div class="ml-64">
-      <DashboardHeader />
-
-      <!-- Main Content Area -->
+      <DashboardHeader title="Dashboard" />
+      
       <main class="pt-20 px-4 pb-8">
 
         <div
@@ -47,7 +46,7 @@ onMounted(async () => {
               </p>
               <router-link to="/view-profile"
                 class="inline-flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-all shadow-sm">
-                <Plus class="w-4 h-4" />
+                <Eye class="w-4 h-4" />
                 View Profile
               </router-link>
             </div>
