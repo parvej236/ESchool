@@ -39,8 +39,8 @@ public class JwtFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
-        String token      = null;
-        String username   = null;
+        String token = null;
+        String username = null;
 
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
@@ -82,7 +82,9 @@ public class JwtFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    /** Write a JSON error body instead of an empty 401/403 */
+    /**
+     * Write a JSON error body instead of an empty 401/403
+     */
     private void sendJsonError(
             HttpServletResponse response,
             int status,

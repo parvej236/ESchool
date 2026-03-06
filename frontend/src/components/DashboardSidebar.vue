@@ -16,7 +16,7 @@ const handleLogout = () => {
   <aside
     class="w-64 bg-linear-to-br from-purple-300/40 via-white to-blue-50/75 bg-white text-gray-700 min-h-screen fixed left-0 top-0 z-30 border-r border-gray-700/20 rounded-r-2xl">
 
-    <router-link to="/dashboard" class="p-4.5 flex items-center justify-center gap-2">
+    <router-link to="/dashboard" class="px-2 py-3 flex items-center justify-start gap-2">
       <img src="/src/assets/images/quantum-logo-9d5Rton5.png" alt="Amrapari Logo" class="w-9 h-9" />
       <div class="text-3xl font-extrabold text-gray-800">Amrapari</div>
     </router-link>

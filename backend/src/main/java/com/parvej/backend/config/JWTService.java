@@ -40,14 +40,18 @@ public class JWTService {
 
     // ── Generate tokens ────────────────────────────────
 
-    /** Short-lived access token (10 min) — sent with every API request */
+    /**
+     * Short-lived access token (10 min) — sent with every API request
+     */
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "access");
         return buildToken(claims, username, accessTokenExpiry);
     }
 
-    /** Long-lived refresh token (7 days) — used only to get a new access token */
+    /**
+     * Long-lived refresh token (7 days) — used only to get a new access token
+     */
     public String generateRefreshToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("type", "refresh");
@@ -95,7 +99,9 @@ public class JWTService {
 
     // ── Validate ───────────────────────────────────────
 
-    /** Used by JwtFilter — validates access tokens only */
+    /**
+     * Used by JwtFilter — validates access tokens only
+     */
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
             String username = extractUsername(token);

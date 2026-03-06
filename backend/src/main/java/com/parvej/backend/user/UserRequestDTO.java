@@ -1,4 +1,4 @@
-package com.parvej.backend.dto;
+package com.parvej.backend.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

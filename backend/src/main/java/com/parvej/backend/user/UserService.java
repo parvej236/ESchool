@@ -1,8 +1,5 @@
 package com.parvej.backend.user;
 
-import com.parvej.backend.dto.UserRequestDTO;
-import com.parvej.backend.dto.UserResponseDTO;
-
 import java.util.List;
 
 public interface UserService {

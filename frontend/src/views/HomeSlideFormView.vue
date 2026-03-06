@@ -7,8 +7,7 @@ import { useAuthStore } from '@/stores/auth'
 import { useTranslate } from '@/composables/useTranslate'
 import {
   ImagePlus, X, ArrowLeft, Save, Link,
-  LayoutList, ToggleLeft, ToggleRight,
-  Languages, ArrowLeftRight, AlertTriangle, CheckCircle
+  LayoutList, ToggleLeft, ToggleRight, ArrowLeftRight, AlertTriangle, CheckCircle
 } from 'lucide-vue-next'
 
 const route     = useRoute()
@@ -186,7 +185,7 @@ onMounted(() => {
   <DashboardSidebar />
   <div class="ml-0 md:ml-64 transition-all">
     <DashboardHeader />
-    <main class="pt-3 px-3 sm:px-6 pb-10">
+    <main class="pt-3 px-3 sm:px-6 pb-10 mt-16">
 
       <!-- Toast -->
       <Transition enter-active-class="transition duration-300 ease-out"
@@ -331,11 +330,7 @@ onMounted(() => {
           <!-- Title — bilingual -->
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div class="flex items-center gap-2 mb-4">
-              <Languages class="w-4 h-4 text-indigo-500" />
               <h3 class="text-sm font-bold text-gray-700">Title</h3>
-              <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                Bilingual
-              </span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -344,7 +339,7 @@ onMounted(() => {
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    🇬🇧 English <span class="text-red-400">*</span>
+                    English <span class="text-red-400">*</span>
                   </label>
                   <!-- Translate EN → BN -->
                   <button type="button" @click="translateTitle('en-to-bn')"
@@ -371,7 +366,7 @@ onMounted(() => {
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    🇧🇩 বাংলা
+                    বাংলা
                   </label>
                   <!-- Translate BN → EN -->
                   <button type="button" @click="translateTitle('bn-to-en')"
@@ -400,11 +395,7 @@ onMounted(() => {
           <!-- Description — bilingual -->
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div class="flex items-center gap-2 mb-4">
-              <Languages class="w-4 h-4 text-indigo-500" />
               <h3 class="text-sm font-bold text-gray-700">Description</h3>
-              <span class="ml-auto text-xs text-gray-400 bg-gray-100 px-2 py-0.5 rounded-full">
-                Optional · Bilingual
-              </span>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -413,7 +404,7 @@ onMounted(() => {
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    🇬🇧 English
+                    English
                   </label>
                   <button type="button" @click="translateDescription('en-to-bn')"
                     :disabled="!form.description.trim() || isTranslating('desc-en-to-bn')"
@@ -440,7 +431,7 @@ onMounted(() => {
               <div>
                 <div class="flex items-center justify-between mb-1.5">
                   <label class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                    🇧🇩 বাংলা
+                    বাংলা
                   </label>
                   <button type="button" @click="translateDescription('bn-to-en')"
                     :disabled="!form.descriptionBn.trim() || isTranslating('desc-bn-to-en')"

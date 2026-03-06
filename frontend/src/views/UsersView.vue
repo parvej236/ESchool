@@ -2,10 +2,10 @@
 import { ref, computed, onMounted } from 'vue'
 import DashboardHeader from '@/components/DashboardHeader.vue'
 import DashboardSidebar from '@/components/DashboardSidebar.vue'
-import DataFilters from '@/components/shared/DataFilters.vue'
-import DataTable from '@/components/shared/DataTable.vue'
-import DataGrid from '@/components/shared/DataGrid.vue'
-import DataPagination from '@/components/shared/DataPagination.vue'
+import DataFilters from '@/components/common/DataFilters.vue'
+import DataTable from '@/components/common/DataTable.vue'
+import DataGrid from '@/components/common/DataGrid.vue'
+import DataPagination from '@/components/common/DataPagination.vue'
 import { useAuthStore } from '@/stores/auth'                          // ← ADD THIS
 import { UserPlus, X, Eye, EyeOff, Pencil, Trash2, AlertTriangle, Mail } from 'lucide-vue-next'
 

@@ -1,8 +1,6 @@
 package com.parvej.backend.user;
 
 import com.parvej.backend.config.JWTService;
-import com.parvej.backend.dto.UserRequestDTO;
-import com.parvej.backend.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

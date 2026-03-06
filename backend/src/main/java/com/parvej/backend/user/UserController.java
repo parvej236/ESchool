@@ -1,8 +1,6 @@
 package com.parvej.backend.user;
 
 import com.parvej.backend.common.ApiResponse;
-import com.parvej.backend.dto.UserRequestDTO;
-import com.parvej.backend.dto.UserResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

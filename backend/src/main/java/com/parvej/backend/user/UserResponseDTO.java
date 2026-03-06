@@ -1,6 +1,5 @@
-package com.parvej.backend.dto;
+package com.parvej.backend.user;
 
-import com.parvej.backend.user.User;
 import lombok.Getter;
 import lombok.Setter;
 

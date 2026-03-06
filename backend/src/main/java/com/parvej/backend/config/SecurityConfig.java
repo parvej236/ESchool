@@ -30,9 +30,6 @@ import java.util.List;
 public class SecurityConfig {
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
     private JwtFilter jwtFilter;
 
     @Bean

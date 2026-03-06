@@ -21,7 +21,7 @@ public class TranslateController {
      * POST /api/translate
      * Body: { "text": "Hello", "from": "en", "to": "bn" }
      * Returns: { "success": true, "translatedText": "হ্যালো" }
-     *
+     * <p>
      * Uses MyMemory free translation API — no API key needed
      */
     @PostMapping
@@ -29,7 +29,7 @@ public class TranslateController {
         try {
             String text = request.get("text");
             String from = request.get("from");
-            String to   = request.get("to");
+            String to = request.get("to");
 
             if (text == null || text.isBlank())
                 return ResponseEntity.badRequest()
@@ -41,11 +41,11 @@ public class TranslateController {
 
             // ✅ Manually URL-encode the text — fixes the fromHttpUrl issue
             String encodedText = URLEncoder.encode(text, StandardCharsets.UTF_8);
-            String langPair    = from + "|" + to;
+            String langPair = from + "|" + to;
             String encodedPair = URLEncoder.encode(langPair, StandardCharsets.UTF_8);
 
             String url = "https://api.mymemory.translated.net/get"
-                    + "?q="        + encodedText
+                    + "?q=" + encodedText
                     + "&langpair=" + encodedPair;
 
             // Call MyMemory API
@@ -71,10 +71,10 @@ public class TranslateController {
             String translated = (String) responseData.get("translatedText");
 
             return ResponseEntity.ok(Map.of(
-                    "success",        true,
+                    "success", true,
                     "translatedText", translated,
-                    "from",           from,
-                    "to",             to
+                    "from", from,
+                    "to", to
             ));
 
         } catch (Exception e) {
