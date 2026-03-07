@@ -8,10 +8,11 @@ const route     = useRoute()
 const router    = useRouter()
 const authStore = useAuthStore()
 
-// Don't show navbar on dashboard/admin pages (they have their own layout)
+// Don't show navbar when...
 const showNavbar = computed(() =>
   !route.path.startsWith('/dashboard') &&
-  !route.path.startsWith('/admin')
+  !route.path.startsWith('/users') && 
+  !route.path.startsWith('/view-profile')
 )
 
 onMounted(async () => {
