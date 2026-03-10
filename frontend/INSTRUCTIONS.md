@@ -1,521 +1,492 @@
-# 📦 Reusable Data List Components — Documentation
+# Theme & Language System — Developer Guide
 
-A complete guide to using the generic `DataTable`, `DataGrid`, `DataFilters`, and `DataPagination` components with the `useDataList` composable. Build any list/table page (Users, Students, Classes, Subjects, etc.) in minutes with zero logic duplication.
-
----
-
-## 📁 File Structure
-
-```
-src/
-├── components/
-│   └── shared/
-│       ├── DataTable.vue        ← Generic sortable table with filter row
-│       ├── DataGrid.vue         ← Generic card grid layout
-│       ├── DataFilters.vue      ← Search bar, view toggle, filter toggle
-│       └── DataPagination.vue   ← Page navigation + items-per-page
-│
-├── composables/
-│   └── useDataList.js           ← All state & logic (fetch, filter, sort, paginate)
-│
-└── views/
-    ├── UsersView.vue            ← Example: Users page
-    ├── ClassesView.vue          ← Example: Classes page
-    └── StudentsView.vue         ← Example: Students page (you build this)
-```
+A reference for every developer working on this project. Read this before touching any component that needs dark/light theme or EN/BN language support.
 
 ---
 
-## 🚀 Quick Start — Build a New Page in 5 Steps
+## Table of Contents
 
-### Step 1 — Import the shared components and composable
+1. [Project Setup](#1-project-setup)
+2. [Theme System](#2-theme-system)
+3. [Language System — Static Strings](#3-language-system--static-strings)
+4. [Language System — Backend Objects](#4-language-system--backend-objects)
+5. [Using Both in a Component](#5-using-both-in-a-component)
+6. [Adding New Translations](#6-adding-new-translations)
+7. [Backend Field Naming Convention](#7-backend-field-naming-convention)
+8. [Quick Reference Cheatsheet](#8-quick-reference-cheatsheet)
 
+---
+
+## 1. Project Setup
+
+### Installed packages
+```bash
+npm install pinia vue-i18n@9
+```
+
+### Registration in `main.js`
+```js
+import { createApp }   from 'vue'
+import { createPinia } from 'pinia'
+import App             from './App.vue'
+import { i18n }        from './i18n'
+
+createApp(App)
+  .use(createPinia())
+  .use(i18n)
+  .mount('#app')
+```
+
+### Theme init — `App.vue` (runs once for the whole app)
 ```vue
 <script setup>
-import { onMounted } from 'vue'
-import DataFilters    from '@/components/shared/DataFilters.vue'
-import DataTable      from '@/components/shared/DataTable.vue'
-import DataGrid       from '@/components/shared/DataGrid.vue'
-import DataPagination from '@/components/shared/DataPagination.vue'
-import { useDataList } from '@/composables/useDataList'
+import { onMounted }     from 'vue'
+import { useThemeStore } from '@/stores/theme'
+
+const themeStore = useThemeStore()
+onMounted(() => themeStore.initTheme())
 </script>
-```
 
----
-
-### Step 2 — Define your columns
-
-Each column is a plain object. Only this page file knows what fields to show.
-
-```js
-const columns = [
-  { key: 'id',      label: 'ID',      sortable: true,  filterable: true,  class: 'w-20' },
-  { key: 'name',    label: 'Name',    sortable: true,  filterable: true },
-  { key: 'email',   label: 'Email',   sortable: true,  filterable: true,  hideOnMobile: true },
-  { key: 'actions', label: 'Actions', sortable: false, filterable: false, class: 'text-center' },
-]
-```
-
-**Column properties:**
-
-| Property        | Type      | Required | Description |
-|-----------------|-----------|----------|-------------|
-| `key`           | `String`  | ✅       | Must match the field name in your API data |
-| `label`         | `String`  | ✅       | Text shown in the column header |
-| `sortable`      | `Boolean` | ✅       | Enables click-to-sort on this column |
-| `filterable`    | `Boolean` | ✅       | Shows a filter input in the filter row |
-| `hideOnMobile`  | `Boolean` | ❌       | Hides column on small screens (`hidden sm:table-cell`) |
-| `class`         | `String`  | ❌       | Extra Tailwind classes on the `<th>` |
-| `tdClass`       | `String`  | ❌       | Extra Tailwind classes on each `<td>` |
-
-> ⚠️ **Important:** Always include an `actions` column last if you need buttons (Edit, Delete, Status badges, etc.).
-
----
-
-### Step 3 — Call the composable
-
-```js
-const {
-  items,           // { fetch() } — call items.fetch() in onMounted
-  filteredItems,   // computed — all rows after search + filters + sort
-  paginatedItems,  // computed — current page slice of filteredItems
-  searchQuery,     // ref — bound to the search input
-  viewMode,        // ref — 'grid' | 'list'
-  showFilterRow,   // ref — toggle the column filter row
-  filters,         // ref — object of per-column filter values
-  sortKey,         // ref — currently sorted column key
-  sortOrder,       // ref — 'asc' | 'desc'
-  currentPage,     // ref — current page number
-  itemsPerPage,    // ref — rows per page
-  totalPages,      // computed — total number of pages
-  hasActiveFilters,// computed — true if any filter/search is active
-  handleSort,      // fn(key) — toggles sort on a column
-  clearFilters,    // fn() — resets all filters, search, and page
-} = useDataList(
-  'http://localhost:8080/api/your-endpoint', // your API URL
-  ['name', 'email']                          // fields to include in global search
-)
-
-onMounted(() => items.fetch())
-```
-
----
-
-### Step 4 — Write the template
-
-```vue
 <template>
-  <DashboardSidebar />
-  <div class="ml-0 md:ml-64 transition-all">
-    <DashboardHeader />
-    <main class="pt-3 px-3 sm:px-6 pb-6">
-
-      <!-- 1. Toolbar: search, filter toggle, view toggle, action button -->
-      <DataFilters
-        title="Your Page Title"
-        :totalCount="filteredItems.length"
-        v-model:searchQuery="searchQuery"
-        v-model:viewMode="viewMode"
-        v-model:showFilterRow="showFilterRow"
-        :hasActiveFilters="hasActiveFilters"
-        @clearFilters="clearFilters"
-      >
-        <template #actions>
-          <!-- Your custom button goes here -->
-          <button class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-            + New Item
-          </button>
-        </template>
-      </DataFilters>
-
-      <!-- 2a. Grid view -->
-      <DataGrid v-if="viewMode === 'grid'" :items="paginatedItems">
-        <template #card="{ item }">
-          <!-- Design your card here, item = one row of data -->
-          <div class="bg-white rounded-2xl p-4 border">
-            <h3>{{ item.name }}</h3>
-            <p>{{ item.email }}</p>
-          </div>
-        </template>
-      </DataGrid>
-
-      <!-- 2b. Table view -->
-      <DataTable
-        v-else
-        :rows="paginatedItems"
-        :columns="columns"
-        :sortKey="sortKey"
-        :sortOrder="sortOrder"
-        :showFilterRow="showFilterRow"
-        :filters="filters"
-        @sort="handleSort"
-        @update:filters="(v) => { filters = v; currentPage = 1 }"
-        @clearFilters="clearFilters"
-      >
-        <!-- Custom cell slots — see Step 5 below -->
-      </DataTable>
-
-      <!-- 3. Empty state -->
-      <div v-if="filteredItems.length === 0" class="text-center py-16 text-gray-400 bg-white rounded-2xl border">
-        <p class="font-medium">No records found</p>
-        <button @click="clearFilters" class="mt-2 text-sm text-blue-500 hover:underline">Clear filters</button>
-      </div>
-
-      <!-- 4. Pagination -->
-      <DataPagination
-        v-if="filteredItems.length > 0"
-        :currentPage="currentPage"
-        :totalPages="totalPages"
-        :totalCount="filteredItems.length"
-        :itemsPerPage="itemsPerPage"
-        @update:currentPage="currentPage = $event"
-        @update:itemsPerPage="itemsPerPage = $event; currentPage = 1"
-      />
-
-    </main>
-  </div>
+  <RouterView />
 </template>
 ```
 
 ---
 
-### Step 5 — Customize table cells with slots
+## 2. Theme System
 
-Each column can have a custom cell template using the `#cell-[key]` slot pattern.
-
-```vue
-<DataTable ...>
-
-  <!-- Plain ID with # prefix -->
-  <template #cell-id="{ value }">
-    <span class="text-gray-400 text-xs">#{{ value }}</span>
-  </template>
-
-  <!-- Avatar + name (uses full row data) -->
-  <template #cell-name="{ row }">
-    <div class="flex items-center gap-3">
-      <div class="w-8 h-8 rounded-lg bg-blue-500 flex items-center justify-center text-white text-xs font-bold">
-        {{ row.name?.charAt(0).toUpperCase() }}
-      </div>
-      <span class="font-medium text-gray-800">{{ row.name }}</span>
-    </div>
-  </template>
-
-  <!-- Status badge -->
-  <template #cell-status="{ value }">
-    <span :class="[
-      'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
-      value === 'active'   ? 'bg-green-100 text-green-700'  :
-      value === 'pending'  ? 'bg-yellow-100 text-yellow-700' :
-                             'bg-red-100 text-red-700'
-    ]">
-      {{ value }}
-    </span>
-  </template>
-
-  <!-- Action buttons -->
-  <template #cell-actions="{ row }">
-    <div class="flex items-center justify-center gap-2">
-      <button @click="editItem(row)" class="text-xs text-blue-500 hover:underline">Edit</button>
-      <button @click="deleteItem(row.id)" class="text-xs text-red-400 hover:underline">Delete</button>
-    </div>
-  </template>
-
-</DataTable>
-```
-
-**Slot variables:**
-
-| Variable | Description |
-|----------|-------------|
-| `{ value }` | The value of `row[col.key]` — use for simple display |
-| `{ row }`   | The entire row object — use when you need other fields |
-
-> 💡 If you don't provide a slot for a column, it falls back to displaying `row[col.key]` as plain text.
-
----
-
-## 📋 Component API Reference
-
-### `<DataFilters>`
-
-| Prop / Event             | Type      | Description |
-|--------------------------|-----------|-------------|
-| `title`                  | `String`  | Page heading (e.g. "Users", "Classes") |
-| `totalCount`             | `Number`  | Shown as "X records found" |
-| `v-model:searchQuery`    | `String`  | Two-way bound search input |
-| `v-model:viewMode`       | `String`  | `'grid'` or `'list'` |
-| `v-model:showFilterRow`  | `Boolean` | Toggles the column filter row in the table |
-| `hasActiveFilters`       | `Boolean` | Shows the red "Clear" button when `true` |
-| `showViewToggle`         | `Boolean` | Set `false` to hide the grid/list toggle (default: `true`) |
-| `searchPlaceholder`      | `String`  | Placeholder for the search input |
-| `@clearFilters`          | Event     | Emitted when "Clear" is clicked |
-| `#actions` slot          | Slot      | Put your "New Item" button here |
-
----
-
-### `<DataTable>`
-
-| Prop / Event         | Type       | Description |
-|----------------------|------------|-------------|
-| `rows`               | `Array`    | The current page of data to display |
-| `columns`            | `Array`    | Column definitions (see column properties above) |
-| `sortKey`            | `String`   | Currently sorted column key |
-| `sortOrder`          | `String`   | `'asc'` or `'desc'` |
-| `showFilterRow`      | `Boolean`  | Shows or hides the filter input row |
-| `filters`            | `Object`   | Current per-column filter values |
-| `@sort`              | Event      | Emits column key when a header is clicked |
-| `@update:filters`    | Event      | Emits updated filters object |
-| `@clearFilters`      | Event      | Emits when "Clear" is clicked in the filter row |
-| `#cell-[key]` slots  | Slot       | Custom cell renderer per column |
-
----
-
-### `<DataGrid>`
-
-| Prop          | Type     | Description |
-|---------------|----------|-------------|
-| `items`       | `Array`  | The current page of data to display |
-| `gridClass`   | `String` | Tailwind grid classes (default: `'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5'`) |
-| `#card` slot  | Slot     | Card template — receives `{ item }` |
-
-**Custom grid columns example:**
-```vue
-<!-- 3 columns max (e.g. for wider cards) -->
-<DataGrid :items="paginatedItems" gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-  <template #card="{ item }"> ... </template>
-</DataGrid>
-```
-
----
-
-### `<DataPagination>`
-
-| Prop / Event             | Type      | Description |
-|--------------------------|-----------|-------------|
-| `currentPage`            | `Number`  | Active page number |
-| `totalPages`             | `Number`  | Total number of pages |
-| `totalCount`             | `Number`  | Total number of filtered records |
-| `itemsPerPage`           | `Number`  | Records shown per page |
-| `itemsPerPageOptions`    | `Array`   | Dropdown options (default: `[5, 10, 20, 50]`) |
-| `@update:currentPage`    | Event     | Emits new page number |
-| `@update:itemsPerPage`   | Event     | Emits new items-per-page value |
-
----
-
-### `useDataList(apiUrl, searchFields)`
-
-| Parameter      | Type       | Description |
-|----------------|------------|-------------|
-| `apiUrl`       | `String`   | Full URL of your API endpoint |
-| `searchFields` | `String[]` | Field names to search across with the global search |
-
-**Expected API response format:**
-```json
-{
-  "success": true,
-  "data": [
-    { "id": 1, "name": "Alice", "email": "alice@mail.com" },
-    { "id": 2, "name": "Bob",   "email": "bob@mail.com" }
-  ]
-}
-```
-
-> ⚠️ The composable expects `result.success === true` and `result.data` to be the array. If your API uses a different shape, edit the `fetch` function inside `useDataList.js`.
-
----
-
-## 🧩 Real Page Examples
-
-### Users Page
+### File: `src/stores/theme.js`
 ```js
-const columns = [
-  { key: 'id',       label: 'ID',      sortable: true,  filterable: true,  class: 'w-20' },
-  { key: 'username', label: 'User',    sortable: true,  filterable: true },
-  { key: 'email',    label: 'Email',   sortable: true,  filterable: true,  hideOnMobile: true },
-  { key: 'actions',  label: 'Actions', sortable: false, filterable: false, class: 'text-center' },
-]
-const { ...all } = useDataList('http://localhost:8080/api/users/all', ['username', 'email'])
+import { defineStore } from 'pinia'
+import { ref }         from 'vue'
+
+export const useThemeStore = defineStore('theme', () => {
+  const isDark = ref(false)
+
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark)
+    isDark.value = dark
+  }
+
+  function toggleTheme() {
+    const next = !isDark.value
+    localStorage.setItem('theme', next ? 'dark' : 'light')
+    applyTheme(next)
+  }
+
+  function initTheme() {
+    const stored      = localStorage.getItem('theme')
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+    applyTheme(stored ? stored === 'dark' : prefersDark)
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+      if (!localStorage.getItem('theme')) applyTheme(e.matches)
+    })
+  }
+
+  return { isDark, toggleTheme, initTheme }
+})
 ```
 
-### Classes Page
-```js
-const columns = [
-  { key: 'id',       label: 'ID',         sortable: true,  filterable: true,  class: 'w-20' },
-  { key: 'name',     label: 'Class Name', sortable: true,  filterable: true },
-  { key: 'teacher',  label: 'Teacher',    sortable: true,  filterable: true,  hideOnMobile: true },
-  { key: 'students', label: 'Students',   sortable: true,  filterable: false, class: 'text-center' },
-  { key: 'actions',  label: 'Actions',    sortable: false, filterable: false, class: 'text-center' },
-]
-const { ...all } = useDataList('http://localhost:8080/api/classes', ['name', 'teacher'])
-```
-
-### Students Page
-```js
-const columns = [
-  { key: 'id',        label: 'ID',          sortable: true,  filterable: true,  class: 'w-20' },
-  { key: 'name',      label: 'Student',     sortable: true,  filterable: true },
-  { key: 'class',     label: 'Class',       sortable: true,  filterable: true,  hideOnMobile: true },
-  { key: 'roll',      label: 'Roll No',     sortable: true,  filterable: true },
-  { key: 'status',    label: 'Status',      sortable: false, filterable: false, class: 'text-center' },
-  { key: 'actions',   label: 'Actions',     sortable: false, filterable: false, class: 'text-center' },
-]
-const { ...all } = useDataList('http://localhost:8080/api/students', ['name', 'class'])
-```
-
-### Subjects Page
-```js
-const columns = [
-  { key: 'id',       label: 'ID',           sortable: true,  filterable: true,  class: 'w-20' },
-  { key: 'name',     label: 'Subject',      sortable: true,  filterable: true },
-  { key: 'code',     label: 'Code',         sortable: true,  filterable: true },
-  { key: 'class',    label: 'Class',        sortable: true,  filterable: true,  hideOnMobile: true },
-  { key: 'actions',  label: 'Actions',      sortable: false, filterable: false, class: 'text-center' },
-]
-const { ...all } = useDataList('http://localhost:8080/api/subjects', ['name', 'code'])
-```
-
----
-
-## 🎨 Common Cell Slot Recipes
-
-Copy and paste these into any page as needed.
-
-### Avatar with initials
+### How to use theme in any component
 ```vue
-<template #cell-name="{ row }">
-  <div class="flex items-center gap-3">
-    <div class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold"
-      :style="{ backgroundColor: getAvatarColor(row.id) }">
-      {{ getInitials(row.name) }}
-    </div>
-    <div>
-      <p class="font-medium text-gray-800 text-sm">{{ row.name }}</p>
-      <p class="text-xs text-gray-400 sm:hidden">{{ row.email }}</p>
-    </div>
-  </div>
-</template>
-```
+<script setup>
+import { useThemeStore } from '@/stores/theme'
+const themeStore = useThemeStore()
+</script>
 
-### Status badge (active / inactive / pending)
-```vue
-<template #cell-status="{ value }">
-  <span :class="[
-    'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-    value === 'active'   ? 'bg-green-100 text-green-700'   :
-    value === 'inactive' ? 'bg-gray-100 text-gray-500'     :
-    value === 'pending'  ? 'bg-yellow-100 text-yellow-700' :
-                           'bg-red-100 text-red-700'
-  ]">
-    {{ value }}
-  </span>
-</template>
-```
+<template>
+  <!-- Bind classes -->
+  <div :class="themeStore.isDark ? 'bg-[#141920] text-white' : 'bg-white text-slate-900'">
 
-### Count badge
-```vue
-<template #cell-students="{ value }">
-  <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
-    {{ value }} students
-  </span>
-</template>
-```
+  <!-- Bind styles -->
+  <button :style="themeStore.isDark
+    ? 'background: #1c2430; border: 1px solid #2b3849;'
+    : 'background: #f1f5f9; border: 1px solid #e2e8f0;'">
 
-### Edit + Delete actions
-```vue
-<template #cell-actions="{ row }">
-  <div class="flex items-center justify-center gap-3">
-    <button @click="editItem(row)" class="text-xs text-blue-500 hover:text-blue-700 font-medium transition">
-      Edit
-    </button>
-    <button @click="deleteItem(row.id)" class="text-xs text-red-400 hover:text-red-600 font-medium transition">
-      Delete
-    </button>
-  </div>
-</template>
-```
-
-### View button
-```vue
-<template #cell-actions="{ row }">
-  <button @click="viewItem(row)" class="text-xs bg-blue-50 text-blue-600 hover:bg-blue-100 px-3 py-1 rounded-lg font-medium transition">
-    View
+  <!-- Toggle button -->
+  <button @click="themeStore.toggleTheme">
+    Toggle Theme
   </button>
 </template>
 ```
 
-### Helper functions (add to any page that needs avatars)
-```js
-const AVATAR_COLORS = ['#7C3AED','#059669','#DC2626','#D97706','#2563EB','#DB2777','#0891B2','#65A30D']
-const getAvatarColor = (id) => AVATAR_COLORS[id % AVATAR_COLORS.length]
-const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) ?? '??'
+### ✅ DO — Dark theme color palette
+```
+Background base:      #0f1318
+Surface / cards:      #141920
+Elevated surface:     #1c2430
+Border subtle:        #232c3a
+Border interactive:   #2b3849
+Border hover:         #3a4d63
+
+Text primary:         #e2e8f0  (slate-200)
+Text secondary:       #94a3b8  (slate-400)
+Text muted:           #7a8a9e
+
+Accent blue:          #7eb8f7
+Accent blue bg:       #1a2a3d
+Accent blue border:   #2a3f5c
+Accent emerald:       #34d399
+Accent amber:         #c8a84b
+```
+
+### ✅ DO — Light theme color palette
+```
+Background base:      #f8f9fc
+Surface / cards:      #ffffff
+Border:               #e2e8f0  (slate-200)
+
+Text primary:         #0f172a  (slate-900)
+Text secondary:       #64748b  (slate-500)
+Text muted:           #94a3b8  (slate-400)
+
+Accent blue:          #3b82f6
+Accent blue bg:       #eff6ff
+Accent emerald:       #10b981
+```
+
+### ❌ DON'T
+```
+- Never use Tailwind dark: prefix — use themeStore.isDark ternary instead
+- Never create a local isDark ref in a component
+- Never call applyTheme() or initTheme() from a component — only App.vue does this
+- Never hardcode color values outside these palettes
 ```
 
 ---
 
-## ⚙️ Customization Tips
+## 3. Language System — Static Strings
 
-### Hide the grid/list toggle (table-only pages)
-```vue
-<DataFilters ... :showViewToggle="false">
-```
-
-### Change items-per-page options
-```vue
-<DataPagination ... :itemsPerPageOptions="[10, 25, 100]" />
-```
-
-### Start in list view instead of grid
+### File: `src/i18n.js`
 ```js
-const { viewMode, ...rest } = useDataList(url, fields)
-viewMode.value = 'list' // set default before mounting
+import { createI18n } from 'vue-i18n'
+import en from './locales/en'
+import bn from './locales/bn'
+
+export const i18n = createI18n({
+  legacy: false,
+  locale: localStorage.getItem('lang') || 'en',
+  fallbackLocale: 'en',
+  messages: { en, bn }
+})
 ```
 
-### Change grid column count
-```vue
-<!-- 3-column max grid -->
-<DataGrid gridClass="grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" ...>
-```
-
-### Add a custom search placeholder
-```vue
-<DataFilters searchPlaceholder="Search by name or email..." ...>
-```
-
-### Change API response shape
-If your API returns `{ status: 'ok', result: [...] }` instead of `{ success: true, data: [...] }`,
-edit `useDataList.js`:
+### File: `src/composables/useLang.js`
 ```js
-// Change this line in useDataList.js:
-if (result.success) rawItems.value = result.data
-// To match your API:
-if (result.status === 'ok') rawItems.value = result.result
+import { computed } from 'vue'
+import { useI18n }  from 'vue-i18n'
+
+export function useLang() {
+  const { t, locale } = useI18n()
+
+  const isBn = computed(() => locale.value === 'bn')
+
+  // For backend objects: reads obj.titleBn or obj.titleEn
+  function tField(obj, field) {
+    if (!obj) return ''
+    return isBn.value
+      ? (obj[`${field}Bn`] || obj[`${field}En`] || '')
+      : (obj[`${field}En`] || obj[field]         || '')
+  }
+
+  function toggleLang() {
+    locale.value = locale.value === 'en' ? 'bn' : 'en'
+    localStorage.setItem('lang', locale.value)
+  }
+
+  return { t, locale, isBn, tField, toggleLang }
+}
+```
+
+### How to use language in any component
+```vue
+<script setup>
+import { useLang } from '@/composables/useLang'
+const { t, isBn, tField, toggleLang } = useLang()
+</script>
+
+<template>
+  <!-- Static translation key -->
+  <h1 :class="isBn ? 'bn-font' : ''">{{ t('nav.home') }}</h1>
+
+  <!-- Backend object field -->
+  <h2>{{ tField(slide, 'title') }}</h2>
+
+  <!-- Toggle button -->
+  <button @click="toggleLang">
+    {{ isBn ? 'Switch to English' : 'বাংলায় পরিবর্তন করুন' }}
+  </button>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
+.bn-font { font-family: 'Noto Sans Bengali', sans-serif; }
+</style>
 ```
 
 ---
 
-## ❓ Troubleshooting
+## 4. Language System — Backend Objects
 
-| Problem | Cause | Fix |
-|---------|-------|-----|
-| Data not loading | Wrong API URL or response shape | Check browser Network tab; verify `result.success` and `result.data` |
-| Filter row not appearing | `showFilterRow` not toggled | Click the Filter button in the toolbar (only visible in list view) |
-| Sort not working | Column `sortable: false` | Set `sortable: true` on the column |
-| Column filter missing | Column `filterable: false` | Set `filterable: true` on the column |
-| Grid not showing | `viewMode` defaults to `'list'` | Change `viewMode.value = 'grid'` after calling the composable |
-| Mobile column missing | `hideOnMobile: true` is set | Expected behavior — email appears inline under the name on mobile |
-| Pagination shows wrong total | `filteredItems` vs `paginatedItems` confusion | Always bind `filteredItems.length` to `totalCount`, never `paginatedItems.length` |
+When data comes from the API, the backend sends bilingual fields using this naming convention:
+
+### Backend JSON response example
+```json
+{
+  "id": 1,
+  "titleEn": "Welcome to Our School",
+  "titleBn": "আমাদের স্কুলে স্বাগতম",
+  "descriptionEn": "Excellence in education.",
+  "descriptionBn": "শিক্ষায় শ্রেষ্ঠত্ব।",
+  "imageUrl": "/uploads/slide1.jpg",
+  "linkUrl": "/about"
+}
+```
+
+### Reading backend fields in template
+```vue
+<!-- tField(object, 'fieldName') -->
+<!-- Automatically picks titleBn or titleEn based on active language -->
+
+<h1>{{ tField(slide, 'title') }}</h1>
+<p>{{ tField(slide, 'description') }}</p>
+<p>{{ tField(article, 'content') }}</p>
+<p>{{ tField(teacher, 'name') }}</p>
+```
+
+### How tField resolves
+```
+Active language = EN  →  reads obj.titleEn  →  fallback: obj.title
+Active language = BN  →  reads obj.titleBn  →  fallback: obj.titleEn
+```
 
 ---
 
-## 📌 Summary Checklist for Every New Page
+## 5. Using Both in a Component
 
-- [ ] Import `DataFilters`, `DataTable`, `DataGrid`, `DataPagination`, `useDataList`
-- [ ] Define `columns` array with correct keys, labels, sortable, filterable flags
-- [ ] Call `useDataList(url, searchFields)` and destructure what you need
-- [ ] Call `items.fetch()` inside `onMounted`
-- [ ] Add `<DataFilters>` with your custom `#actions` button
-- [ ] Add `<DataGrid>` with a `#card` slot for grid view
-- [ ] Add `<DataTable>` with `#cell-[key]` slots for custom cells
-- [ ] Add empty state block
-- [ ] Add `<DataPagination>`
+### Full component template
+```vue
+<script setup>
+import { useThemeStore } from '@/stores/theme'
+import { useLang }       from '@/composables/useLang'
+
+const themeStore        = useThemeStore()
+const { t, isBn, tField } = useLang()
+</script>
+
+<template>
+  <section
+    :class="themeStore.isDark ? 'bg-[#0f1318] text-white' : 'bg-[#f8f9fc] text-slate-900'"
+  >
+    <!-- Static string from locale file -->
+    <h1 :class="isBn ? 'bn-font' : ''">
+      {{ t('section.title') }}
+    </h1>
+
+    <!-- Backend object field -->
+    <p :class="isBn ? 'bn-font' : ''">
+      {{ tField(item, 'description') }}
+    </p>
+
+    <!-- Theme-aware card -->
+    <div
+      :class="themeStore.isDark
+        ? 'bg-[#141920] border border-[#232c3a]'
+        : 'bg-white border border-slate-200 shadow-sm'"
+    >
+      ...
+    </div>
+  </section>
+</template>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
+.bn-font { font-family: 'Noto Sans Bengali', sans-serif; }
+</style>
+```
+
+---
+
+## 6. Adding New Translations
+
+### Step 1 — Add keys to both locale files
+
+**`src/locales/en.js`**
+```js
+export default {
+  nav: {
+    home:      'Home',
+    vision:    'Vision',
+    dashboard: 'Dashboard',
+    login:     'Login',
+  },
+  hero: {
+    learnMore:    'Learn More',
+    loading:      'Loading...',
+    welcome:      'Welcome to Our School',
+    tagline:      'Excellence in Education, Innovation in Learning',
+    heroContent1: 'I Believe',
+    heroContent2: 'I Dare',
+    heroContent3: 'I Can',
+    heroContent4: 'I Will',
+    heroContent5: 'My Life',
+    heroContent6: 'I Build',
+    heroTagline:  'The world is mine.',
+  },
+  about: {
+    aboutTitle: 'Who We Are',
+    aboutDesc1: 'We are committed to academic excellence and holistic development.',
+    aboutDesc2: 'Our community of educators, students, and families grows together.',
+  },
+  // ── Add new sections below ──────────────────────────
+  // mySection: {
+  //   title: 'My Title',
+  //   body:  'My body text.',
+  // },
+}
+```
+
+**`src/locales/bn.js`**
+```js
+export default {
+  nav: {
+    home:      'হোম',
+    vision:    'ভিশন',
+    dashboard: 'ড্যাশবোর্ড',
+    login:     'লগইন',
+  },
+  hero: {
+    learnMore:    'আরও জানুন',
+    loading:      'লোড হচ্ছে...',
+    welcome:      'আমাদের স্কুলে স্বাগতম',
+    tagline:      'শিক্ষায় শ্রেষ্ঠত্ব, শেখায় উদ্ভাবন',
+    heroContent1: 'আমি বিশ্বাস করি',
+    heroContent2: 'আমি সাহস করি',
+    heroContent3: 'আমি পারি',
+    heroContent4: 'আমি করব',
+    heroContent5: 'আমার জীবন',
+    heroContent6: 'আমি গড়ি',
+    heroTagline:  'পৃথিবী আমার।',
+  },
+  about: {
+    aboutTitle: 'আমরা কারা',
+    aboutDesc1: 'আমরা শিক্ষার শ্রেষ্ঠত্ব ও সামগ্রিক বিকাশে প্রতিশ্রুতিবদ্ধ।',
+    aboutDesc2: 'আমাদের শিক্ষক, শিক্ষার্থী ও পরিবারের সমন্বয়ে গড়া সম্প্রদায় একসাথে এগিয়ে যায়।',
+  },
+  // ── নতুন সেকশন নিচে যোগ করুন ──────────────────────
+  // mySection: {
+  //   title: 'আমার শিরোনাম',
+  //   body:  'আমার বিষয়বস্তু।',
+  // },
+}
+```
+
+### Step 2 — Use in component
+```vue
+{{ t('mySection.title') }}
+{{ t('mySection.body') }}
+```
+
+### Key naming rules
+```
+✅ nav.home           — dot-separated namespace.key
+✅ hero.learnMore     — camelCase keys
+✅ about.aboutTitle   — descriptive names
+❌ home               — no namespace (will conflict)
+❌ nav.home-link      — no hyphens
+❌ NAV.HOME           — no uppercase
+```
+
+---
+
+## 7. Backend Field Naming Convention
+
+The backend **must** follow this naming pattern for `tField()` to work automatically.
+
+### Pattern: `{fieldName}En` / `{fieldName}Bn`
+
+| Field purpose    | English key      | Bengali key      |
+|------------------|------------------|------------------|
+| Title            | `titleEn`        | `titleBn`        |
+| Description      | `descriptionEn`  | `descriptionBn`  |
+| Content / body   | `contentEn`      | `contentBn`      |
+| Short summary    | `summaryEn`      | `summaryBn`      |
+| Button label     | `labelEn`        | `labelBn`        |
+| Teacher name     | `nameEn`         | `nameBn`         |
+| Address          | `addressEn`      | `addressBn`      |
+
+### Non-bilingual fields (no suffix needed)
+```
+id, imageUrl, linkUrl, videoUrl, slug,
+createdAt, updatedAt, isActive, order, type
+```
+
+### Full example API response
+```json
+{
+  "id": 42,
+  "titleEn": "Annual Science Fair",
+  "titleBn": "বার্ষিক বিজ্ঞান মেলা",
+  "descriptionEn": "Students showcase their projects.",
+  "descriptionBn": "শিক্ষার্থীরা তাদের প্রকল্প উপস্থাপন করে।",
+  "imageUrl": "/uploads/events/science-fair.jpg",
+  "linkUrl": "/events/science-fair",
+  "isActive": true,
+  "createdAt": "2025-01-15T10:00:00Z"
+}
+```
+
+### Usage in component
+```vue
+<h2>{{ tField(event, 'title') }}</h2>
+<p>{{ tField(event, 'description') }}</p>
+<img :src="imgUrl(event.imageUrl)" />  <!-- imageUrl needs no tField -->
+```
+
+---
+
+## 8. Quick Reference Cheatsheet
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  IMPORTS                                                      │
+├─────────────────────────────────────────────────────────────┤
+│  import { useThemeStore } from '@/stores/theme'              │
+│  import { useLang }       from '@/composables/useLang'       │
+├─────────────────────────────────────────────────────────────┤
+│  SETUP                                                        │
+├─────────────────────────────────────────────────────────────┤
+│  const themeStore          = useThemeStore()                 │
+│  const { t, isBn, tField } = useLang()                      │
+├─────────────────────────────────────────────────────────────┤
+│  THEME                                                        │
+├─────────────────────────────────────────────────────────────┤
+│  themeStore.isDark          → true / false                   │
+│  themeStore.toggleTheme()   → toggle + persist               │
+│  themeStore.initTheme()     → call once in App.vue only      │
+├─────────────────────────────────────────────────────────────┤
+│  LANGUAGE                                                     │
+├─────────────────────────────────────────────────────────────┤
+│  t('section.key')           → static string from locale      │
+│  tField(obj, 'title')       → obj.titleBn or obj.titleEn     │
+│  isBn                       → computed true if Bengali        │
+│  toggleLang()               → switch EN ↔ BN + persist       │
+├─────────────────────────────────────────────────────────────┤
+│  BENGALI FONT                                                 │
+├─────────────────────────────────────────────────────────────┤
+│  :class="isBn ? 'bn-font' : ''"                              │
+│  .bn-font { font-family: 'Noto Sans Bengali', sans-serif; }  │
+│  Add @import in each component's <style scoped>              │
+├─────────────────────────────────────────────────────────────┤
+│  BACKEND FIELDS                                               │
+├─────────────────────────────────────────────────────────────┤
+│  Always send:  titleEn, titleBn, descriptionEn, descriptionBn│
+│  Never suffix: id, imageUrl, linkUrl, isActive, createdAt    │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+> **Rule of thumb:** Every component needs exactly 2 imports and 2 lines of setup. If you find yourself writing more than that for theme/language, something is wrong — re-read this guide.

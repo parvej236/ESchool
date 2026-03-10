@@ -3,10 +3,12 @@ import { RouterView, useRoute, useRouter } from 'vue-router'
 import { computed, onMounted } from 'vue'
 import Navbar from '@/components/Navbar.vue'
 import { useAuthStore } from '@/stores/auth'
+import { useThemeStore } from './stores/theme'
 
 const route     = useRoute()
 const router    = useRouter()
 const authStore = useAuthStore()
+const themeStore = useThemeStore()
 
 // Don't show navbar when...
 const showNavbar = computed(() =>
@@ -29,6 +31,8 @@ onMounted(async () => {
       query: { redirect: route.fullPath }
     })
   }
+
+  themeStore.initTheme()
 })
 </script>
 

@@ -82,6 +82,18 @@ const routes = [
   name: 'home-slides-edit',
   component: () => import('@/views/HomeSlideFormView.vue'),
   meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/subjects',
+  name: 'subjects',
+  component: () => import('@/components/Chapter.vue'),
+  meta: { requiresAuth: true }
+},
+{
+  path: '/dashboard/classes',
+  name: 'classes',
+  component: () => import('@/views/HomeSlideFormView.vue'),
+  meta: { requiresAuth: true }
 }
 ];
 
